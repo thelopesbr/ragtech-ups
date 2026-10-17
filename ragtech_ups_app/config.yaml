@@ -1,5 +1,5 @@
 name: "Nobreak Ragtech"
-version: "0.1.0"
+version: "0.1.1"
 slug: "ragtech_ups"
 description: "Monitora nobreaks Ragtech ligados via USB e publica os dados no Home Assistant por MQTT"
 url: "https://github.com/thelopesbr/ragtech-ups"
@@ -10,9 +10,10 @@ arch:
 init: false
 # Mapeia as portas seriais do host (o nobreak aparece como /dev/ttyACMx)
 uart: true
-# Usa o broker MQTT já instalado no Home Assistant; as credenciais vêm do Supervisor
+# Usa o broker do app Mosquitto quando ele estiver rodando (credenciais vêm do Supervisor);
+# sem ele, o broker é informado nas opções mqtt_*
 services:
-  - mqtt:need
+  - mqtt:want
 options:
   topic: "ragtech_ups/nobreak"
   interval: 5
@@ -28,3 +29,8 @@ schema:
   ha_discovery: "bool"
   publish_fields: "bool"
   debug: "bool?"
+  # Broker manual: se mqtt_host for preenchido, ignora o broker do app Mosquitto
+  mqtt_host: "str?"
+  mqtt_port: "port?"
+  mqtt_username: "str?"
+  mqtt_password: "password?"

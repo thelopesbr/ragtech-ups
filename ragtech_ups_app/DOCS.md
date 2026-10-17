@@ -9,8 +9,8 @@ usam o mesmo protocolo.
 
 ## Antes de instalar
 
-1. Instale e inicie o app **Mosquitto broker** e a integração **MQTT**. As credenciais do broker
-   são obtidas automaticamente; não é preciso digitar nada.
+1. Tenha um broker MQTT e a integração **MQTT** configurados. Com o app **Mosquitto broker**
+   rodando, as credenciais são obtidas automaticamente; com outro broker, preencha as opções `mqtt_*`.
 2. Ligue o cabo USB do nobreak no Home Assistant (ex.: na Raspberry Pi). Ele aparece como `/dev/ttyACM0`.
 
 ## Configuração
@@ -24,6 +24,9 @@ usam o mesmo protocolo.
 | `ha_discovery` | Cria o dispositivo e os sensores automaticamente no Home Assistant. |
 | `publish_fields` | Publica também um tópico MQTT por campo (útil para Node-RED). |
 | `debug` | Logs detalhados. |
+| `mqtt_host` | Broker MQTT manual (ex.: `192.168.0.10`). Vazio = usa o app Mosquitto. |
+| `mqtt_port` | Porta do broker manual (padrão `1883`). |
+| `mqtt_username` / `mqtt_password` | Credenciais do broker manual. |
 
 ## Tópicos MQTT
 
