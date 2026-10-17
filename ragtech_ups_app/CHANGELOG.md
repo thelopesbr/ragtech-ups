@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Remove espaços nas pontas de `mqtt_host` (um espaço colado impedia a conexão).
+- Registra no log quando não consegue conectar ao broker, em vez de ficar em silêncio.
+
 ## 0.1.1
 
 - Broker MQTT configurável nas opções (`mqtt_host`, `mqtt_port`, `mqtt_username`, `mqtt_password`)

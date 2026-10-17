@@ -3,7 +3,8 @@
 
 # Broker: o informado nas opções tem prioridade; senão, o do app Mosquitto (via Supervisor)
 if bashio::config.has_value "mqtt_host"; then
-    mqtt_host="$(bashio::config 'mqtt_host')"
+    # Remove espaços nas pontas: um espaço colado junto do endereço impede a conexão
+    mqtt_host="$(bashio::config 'mqtt_host' | xargs)"
     mqtt_port=1883
     mqtt_username=""
     mqtt_password=""

@@ -47,7 +47,8 @@ class MQTTBridge:
                  ha_discovery: bool = False, discovery_prefix: str = "homeassistant",
                  node_id: str | None = None):
         self.ups = ups
-        self.host = host
+        # Espaços sobrando (comuns ao colar o endereço) quebram a resolução do nome
+        self.host = host.strip()
         self.port = port
         self.base_topic = base_topic.rstrip("/")
         self.interval = interval
@@ -68,6 +69,7 @@ class MQTTBridge:
         self.client.will_set(self._topic("availability"), OFFLINE, qos=qos, retain=True)
         self.client.on_connect = self._on_connect
         self.client.on_disconnect = self._on_disconnect
+        self.client.on_connect_fail = self._on_connect_fail
 
     def run(self) -> None:
         """Lê o nobreak e publica até stop() ser chamado (ou Ctrl+C)."""
@@ -134,6 +136,10 @@ class MQTTBridge:
         log.info("conectado ao broker %s:%s", self.host, self.port)
         # Após reconectar, o LWT pode ter marcado "offline"; republica o estado atual
         self._publish("availability", ONLINE if self._available else OFFLINE)
+
+    def _on_connect_fail(self, client, userdata) -> None:
+        # Falhas de rede/DNS não passam pelo on_connect; sem isto ficariam silenciosas
+        log.warning("não foi possível conectar ao broker %s:%s; tentando de novo", self.host, self.port)
 
     def _on_disconnect(self, client, userdata, flags, reason_code, properties) -> None:
         if reason_code != 0:
